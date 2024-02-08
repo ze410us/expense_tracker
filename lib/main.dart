@@ -1,10 +1,11 @@
 import 'package:expense_tracker/models/color_schemes.dart';
-import 'package:expense_tracker/widgets/expenses.dart';
+import 'package:expense_tracker/widgets/home.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
   runApp(
     MaterialApp(
+      debugShowCheckedModeBanner: false,
       darkTheme: ThemeData.dark().copyWith(
         colorScheme: darkColorScheme,
         elevatedButtonTheme: ElevatedButtonThemeData(
@@ -29,7 +30,7 @@ void main() {
         ),
       ),
       title: "Expenses tracker",
-      home: const Expenses(),
+      home: const Home(),
     ),
   );
 }

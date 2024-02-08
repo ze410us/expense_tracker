@@ -1,5 +1,7 @@
-# expense_tracker
+## Expense tracker
 
 Simple expense tracker
-
-## Getting Started
+* A few screens
+* Simple  theming
+* Primitive state management
+* A bit of adaptiveness
