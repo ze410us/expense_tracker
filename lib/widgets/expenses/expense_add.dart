@@ -53,7 +53,7 @@ class _AddExpenseState extends State<AddExpense> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.75,
+      // height: MediaQuery.of(context).size.height * 0.75,
       child: Form(
         key: _formKey,
         child: Padding(

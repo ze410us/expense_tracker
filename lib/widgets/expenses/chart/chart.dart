@@ -33,60 +33,57 @@ class _ExpensesChartState extends State<ExpensesChart> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.sizeOf(context).height * .2,
-      child: Row(
-        children: [
-          Expanded(
-            flex: 3,
-            child: PieChart(
-              PieChartData(
-                centerSpaceRadius: 30,
-                sectionsSpace: 5,
-                sections: [
-                  for (MapEntry<Category, double> eb
-                      in widget.expenseBuckets.entries)
-                    PieChartSectionData(
-                      color: _getColorByCategory(eb.key),
-                      radius: 40,
-                      value: eb.value,
-                      titlePositionPercentageOffset: 1.6,
-                      title: currencyFormatter.format(eb.value),
-                      titleStyle: TextStyle(
-                        fontSize: 14,
-                        shadows: [
-                          Shadow(
-                            color:
-                                Theme.of(context).textTheme.titleMedium!.color!,
-                            blurRadius: 2,
-                          ),
-                        ],
-                      ),
-                    )
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
+    return Row(
+      children: [
+        Expanded(
+          flex: 3,
+          child: PieChart(
+            PieChartData(
+              centerSpaceRadius: 30,
+              sectionsSpace: 5,
+              sections: [
                 for (MapEntry<Category, double> eb
-                    in widget.expenseBuckets.entries) ...[
-                  ChartLegend(
+                    in widget.expenseBuckets.entries)
+                  PieChartSectionData(
                     color: _getColorByCategory(eb.key),
-                    text: eb.key.name,
-                    isSquare: true,
-                  ),
-                  const SizedBox(
-                    height: 4,
+                    radius: 40,
+                    value: eb.value,
+                    titlePositionPercentageOffset: 1.6,
+                    title: currencyFormatter.format(eb.value),
+                    titleStyle: TextStyle(
+                      fontSize: 14,
+                      shadows: [
+                        Shadow(
+                          color:
+                              Theme.of(context).textTheme.titleMedium!.color!,
+                          blurRadius: 2,
+                        ),
+                      ],
+                    ),
                   )
-                ],
               ],
             ),
           ),
-        ],
-      ),
+        ),
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              for (MapEntry<Category, double> eb
+                  in widget.expenseBuckets.entries) ...[
+                ChartLegend(
+                  color: _getColorByCategory(eb.key),
+                  text: eb.key.name,
+                  isSquare: true,
+                ),
+                const SizedBox(
+                  height: 4,
+                )
+              ],
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

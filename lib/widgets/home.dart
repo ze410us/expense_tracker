@@ -92,28 +92,56 @@ class _HomeState extends State<Home> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       builder: (ctx) => AddExpense(_addExpense),
     );
   }
 
-  Widget getBody() {
+  Widget _getBody() {
     if (expenses.isEmpty) {
-      return const Center(
-        child: NoExpenses(),
-      );
+      return const NoExpenses();
     } else {
-      return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        ExpensesChart(expenseBuckets),
-        const SizedBox(
-          height: 20,
-        ),
-        Expanded(
-          child: ExpensesList(
-            listOfExpenses: expenses,
-            onRemoveExpense: _removeExpense,
+      final width = MediaQuery.sizeOf(context).width;
+
+      if (width < 500) {
+        return Column(children: [
+          SizedBox(
+            height: 200,
+            child: ExpensesChart(expenseBuckets),
           ),
-        )
-      ]);
+          const SizedBox(
+            height: 20,
+          ),
+          Expanded(
+            child: ExpensesList(
+              listOfExpenses: expenses,
+              onRemoveExpense: _removeExpense,
+            ),
+          )
+        ]);
+      } else {
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Flexible(
+              child: SizedBox(
+                height: 200,
+                child: ExpensesChart(expenseBuckets),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Expanded(
+              flex: 2,
+              child: ExpensesList(
+                listOfExpenses: expenses,
+                onRemoveExpense: _removeExpense,
+              ),
+            ),
+          ],
+        );
+      }
     }
   }
 
@@ -129,7 +157,7 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
-      body: getBody(),
+      body: _getBody(),
     );
   }
 }
