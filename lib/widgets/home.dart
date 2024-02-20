@@ -74,6 +74,7 @@ class _HomeState extends State<Home> {
 
   void _showPrompt(Expense removedElement, int index) {
     final snackBar = SnackBar(
+        duration: const Duration(seconds: 2),
         content: Text("'${removedElement.title}' expense was deleted"),
         action: SnackBarAction(
           label: "Undo",
@@ -123,7 +124,8 @@ class _HomeState extends State<Home> {
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Flexible(
+            Expanded(
+              flex: 3,
               child: SizedBox(
                 height: 200,
                 child: ExpensesChart(expenseBuckets),
@@ -133,7 +135,7 @@ class _HomeState extends State<Home> {
               height: 20,
             ),
             Expanded(
-              flex: 2,
+              flex: 5,
               child: ExpensesList(
                 listOfExpenses: expenses,
                 onRemoveExpense: _removeExpense,

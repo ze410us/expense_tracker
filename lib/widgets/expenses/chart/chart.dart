@@ -25,13 +25,6 @@ class _ExpensesChartState extends State<ExpensesChart> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    // final (double width, double height) =
-    //     (MediaQuery.sizeOf(context).width, MediaQuery.sizeOf(context).height);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Row(
       children: [

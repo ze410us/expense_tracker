@@ -52,116 +52,132 @@ class _AddExpenseState extends State<AddExpense> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      // height: MediaQuery.of(context).size.height * 0.75,
-      child: Form(
-        key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(children: [
-            TextFormField(
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return "Please enter the title";
-                }
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
 
-                return null;
-              },
-              controller: _titleController,
-              maxLength: 30,
-              decoration: const InputDecoration(
-                label: Text(
-                  "Title",
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(16, 16, 16, keyboardHeight + 16),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: constraints.maxHeight -
+                      30 -
+                      (constraints.maxHeight > 600 ? keyboardHeight : 0),
                 ),
-              ),
-            ),
-            IntrinsicHeight(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(
-                    child: TextFormField(
+                child: Column(
+                  children: [
+                    TextFormField(
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return "Please enter the amount";
+                          return "Please enter the title";
                         }
 
                         return null;
                       },
-                      controller: _amountController,
-                      keyboardType: TextInputType.number,
+                      controller: _titleController,
+                      maxLength: 30,
                       decoration: const InputDecoration(
-                        prefixText: "\$",
-                        label: Text("Amount"),
+                        label: Text(
+                          "Title",
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: TextFormField(
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return "Please enter the date";
-                        }
+                    IntrinsicHeight(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return "Please enter the amount";
+                                }
 
-                        return null;
-                      },
-                      controller: _dateController,
-                      onTap: () => openCalendar(),
-                      keyboardType: TextInputType.none,
-                      decoration: const InputDecoration(
-                        label: Text("Date"),
-                        prefixIcon: Icon(Icons.calendar_month),
+                                return null;
+                              },
+                              controller: _amountController,
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                prefixText: "\$",
+                                label: Text("Amount"),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          Expanded(
+                            child: TextFormField(
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return "Please enter the date";
+                                }
+
+                                return null;
+                              },
+                              controller: _dateController,
+                              onTap: () => openCalendar(),
+                              keyboardType: TextInputType.none,
+                              decoration: const InputDecoration(
+                                label: Text("Date"),
+                                prefixIcon: Icon(Icons.calendar_month),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 40),
+                    Row(
+                      children: [
+                        DropdownMenu<Category>(
+                            initialSelection: Category.food,
+                            leadingIcon: Icon(selectedIcon),
+                            label: const Text("Category"),
+                            onSelected: changeCategory,
+                            dropdownMenuEntries: Category.values
+                                .map<DropdownMenuEntry<Category>>(
+                                    (Category cat) =>
+                                        DropdownMenuEntry<Category>(
+                                            value: cat,
+                                            label: cat.name,
+                                            leadingIcon: Icon(cat.icon)))
+                                .toList()),
+                      ],
+                    ),
+                    const Spacer(),
+                    Row(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              newExpense.title = _titleController.text;
+                              newExpense.amount =
+                                  double.parse(_amountController.text);
+                              widget.updateCallback(newExpense);
+
+                              Navigator.of(context).pop();
+                            }
+                          },
+                          child: const Text("Save changes"),
+                        ),
+                        const Spacer(),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("Cancel"),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-            const SizedBox(height: 40),
-            Row(
-              children: [
-                DropdownMenu<Category>(
-                    initialSelection: Category.food,
-                    leadingIcon: Icon(selectedIcon),
-                    label: const Text("Category"),
-                    onSelected: changeCategory,
-                    dropdownMenuEntries: Category.values
-                        .map<DropdownMenuEntry<Category>>((Category cat) =>
-                            DropdownMenuEntry<Category>(
-                                value: cat,
-                                label: cat.name,
-                                leadingIcon: Icon(cat.icon)))
-                        .toList()),
-              ],
-            ),
-            const Spacer(),
-            Row(
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      newExpense.title = _titleController.text;
-                      newExpense.amount = double.parse(_amountController.text);
-                      widget.updateCallback(newExpense);
-
-                      Navigator.of(context).pop();
-                    }
-                  },
-                  child: const Text("Save changes"),
-                ),
-                const Spacer(),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("Cancel"),
-                )
-              ],
-            )
-          ]),
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
